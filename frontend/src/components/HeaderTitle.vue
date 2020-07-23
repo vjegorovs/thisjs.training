@@ -15,5 +15,6 @@ export default {
 <style lang="scss" scoped>
 h1 {
   font-size: 42px;
+  cursor: pointer;
 }
 </style>

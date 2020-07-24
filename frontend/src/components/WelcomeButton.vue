@@ -27,6 +27,7 @@ export default {
 
 <style lang="scss" scoped>
 button {
+  cursor: pointer;
   border: 1px solid #e7e8ec;
   border-radius: 10px;
   width: 250px;

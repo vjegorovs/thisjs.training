@@ -35,14 +35,18 @@ export default {
         const result: Question = {
           questionCode: { code: "prism code" }, // here something regarding highlight.js or prism.js
           questionId: 0,
-          questionText: "question text"
+          questionText: "question text",
+          selectedAnswer: null,
+          correctAnswer: 0
         };
         return result;
       } else {
         const result: Question = {
           questionCode: { code: "prism code" }, // here something regarding highlight.js or prism.js
           questionId: 9999,
-          questionText: "question text"
+          questionText: "question text",
+          selectedAnswer: null,
+          correctAnswer: 2
         };
 
         return result;

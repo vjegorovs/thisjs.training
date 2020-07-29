@@ -6,12 +6,13 @@
 
 <script lang="ts">
 export default {
-  setup() {
+  props: { currentQuestion: Object },
+  setup(props) {
     const questionNumber: String = "Question number 7";
     return {
-      questionNumber,
+      questionNumber
     };
-  },
+  }
 };
 </script>
 

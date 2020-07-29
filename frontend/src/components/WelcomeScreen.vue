@@ -14,10 +14,10 @@ import { ref, onBeforeMount, onMounted, onRenderTracked } from "vue";
 
 export default {
   components: {
-    WelcomeButton,
+    WelcomeButton
   },
   props: {
-    homeScreen: { type: Boolean, required: true },
+    homeScreen: { type: Boolean, required: true }
   },
   setup() {
     const welcomeMessage: String = "This is the welcome you deserve";
@@ -29,7 +29,7 @@ export default {
     return {
       welcomeMessage,
       initialized,
-      changeToMainView,
+      changeToMainView
     };
   },
   methods: {
@@ -39,25 +39,25 @@ export default {
         scaleX: 40, //perhaps calculate relative to window size
         scaleY: 40,
         x: 1,
-        ease: "elastic.inOut(4, 5)",
+        ease: "elastic.inOut(4, 5)"
       });
       gsap.to(el.firstChild, {
         duration: 1,
         delay: 0,
-        opacity: 0,
+        opacity: 0
       });
       gsap.to(el.lastElementChild, {
         duration: 1.2,
         delay: 0.5,
-        opacity: 0,
+        opacity: 0
       });
       gsap.to(el, {
         duration: 0.5,
         delay: 0.2,
         height: 0,
-        onComplete: done,
+        onComplete: done
       });
-    },
-  },
+    }
+  }
 };
 </script>

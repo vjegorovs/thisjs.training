@@ -1,44 +1,100 @@
 <template>
   <div class="parent">
     <div class="question">{{ text }}</div>
-    <selection class="selection"></selection>
-    <select-button class="select-button"></select-button>
+    <div class="selection-wrap">
+      <selection :current-question="currentQuestion" class="selection"></selection>
+      <select-button
+        @nextQuestion="questionNumber++"
+        :current-question="currentQuestion"
+        class="select-button"
+      ></select-button>
+    </div>
   </div>
 </template>
 
 <script lang="ts">
 import Selection from "./Selection.vue";
 import SelectButton from "./SelectButton.vue";
+import { ref, computed, watchEffect } from "vue";
+import Question from "../utils/Question";
 
 export default {
   components: { Selection, SelectButton },
   setup() {
     const text: String = "now its in main view";
+    let questionNumber = ref(0);
+
+    const currentQuestion = computed(() => {
+      return fetchQuestion(questionNumber);
+    });
+
+    const fetchQuestion = (questionNumber: Ref<number> = 0) => {
+      // fetch from API
+      console.log(questionNumber.value);
+      if (questionNumber.value === 0) {
+        const result: Question = {
+          questionCode: { code: "prism code" }, // here something regarding highlight.js or prism.js
+          questionId: 0,
+          questionText: "question text"
+        };
+        return result;
+      } else {
+        const result: Question = {
+          questionCode: { code: "prism code" }, // here something regarding highlight.js or prism.js
+          questionId: 9999,
+          questionText: "question text"
+        };
+
+        return result;
+      }
+    };
+
     return {
       text,
+      currentQuestion,
+      questionNumber
     };
-  },
+  }
 };
 </script>
 
 <style lang="scss" scoped>
 .parent {
   display: grid;
-  grid-template-columns: 0.5fr repeat(3, 1fr) 0.5fr;
-  grid-template-rows: 0.2fr repeat(2, 1fr) 0.5fr 1fr;
+  grid-template-columns: minmax(20px, 0.5fr) repeat(2, 1.1fr) 0.8fr minmax(
+      20px,
+      0.5fr
+    );
+  grid-template-rows: 0.2fr repeat(2, 1.4fr) 0.5fr 0.2fr;
   grid-column-gap: 0px;
   grid-row-gap: 0px;
-  height: 60vh;
+  height: 70vh;
   margin-top: 20px;
 }
 
 .question {
-  grid-area: 2 / 2 / 5 / 4;
+  grid-area: 2 / 2 / 5 / 5;
+  box-shadow: inset 4px 4px 17px -6px rgba(0, 0, 0, 0.18);
+  border-radius: 10px;
+  padding: 3px 3px 3px 3px;
 }
+.selection-wrap {
+  grid-area: 2 / 4 / 5 / 5;
+  background: #ffffff;
+  border: 1px solid #e7e8ec;
+  box-shadow: 0px 4px 15px rgba(47, 49, 68, 0.320837);
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
 .selection {
-  grid-area: 2 / 4 / 4 / 5;
+  height: 60%;
+  width: 100%;
 }
 .select-button {
-  grid-area: 4 / 4 / 5 / 5;
+  margin-top: 30px;
 }
 </style>

@@ -1,13 +1,15 @@
 <template>
-  <div>{{ text }}</div>
+  <div>
+    <h3>{{ questionNumber }}</h3>
+  </div>
 </template>
 
 <script lang="ts">
 export default {
   setup() {
-    const text: String = "the selection screen";
+    const questionNumber: String = "Question number 7";
     return {
-      text,
+      questionNumber,
     };
   },
 };

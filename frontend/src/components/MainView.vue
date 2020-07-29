@@ -15,7 +15,7 @@
 <script lang="ts">
 import Selection from "./Selection.vue";
 import SelectButton from "./SelectButton.vue";
-import { ref, computed, watchEffect } from "vue";
+import { ref, computed, watchEffect, reactive } from "vue";
 import Question from "../utils/Question";
 
 export default {
@@ -37,19 +37,22 @@ export default {
           questionId: 0,
           questionText: "question text",
           selectedAnswer: null,
-          correctAnswer: 0
+          correctAnswer: 0,
+          availableAnswers: ["sd", "bb"]
         };
-        return result;
+        console.log(questionNumber.value);
+        return reactive(result);
       } else {
         const result: Question = {
           questionCode: { code: "prism code" }, // here something regarding highlight.js or prism.js
           questionId: 9999,
           questionText: "question text",
           selectedAnswer: null,
-          correctAnswer: 2
+          correctAnswer: 2,
+          availableAnswers: ["karamba", "alarm"]
         };
-
-        return result;
+        console.log(questionNumber.value);
+        return reactive(result);
       }
     };
 

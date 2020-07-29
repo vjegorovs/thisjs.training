@@ -4,4 +4,5 @@ export default interface Question {
   questionText: String;
   selectedAnswer: Number;
   correctAnswer: Number;
+  availableAnswers: String[];
 }

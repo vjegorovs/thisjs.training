@@ -3,8 +3,9 @@
     <div class="question">{{ text }}</div>
     <div class="selection-wrap">
       <selection :current-question="currentQuestion" class="selection"></selection>
+
       <select-button
-        @nextQuestion="questionNumber++"
+        @nextQuestion="nextQuestionHandler"
         :current-question="currentQuestion"
         class="select-button"
       ></select-button>
@@ -21,14 +22,21 @@ import Question from "../utils/Question";
 export default {
   components: { Selection, SelectButton },
   setup() {
+    const QuizList: Object[] = [];
     const text: String = "now its in main view";
     let questionNumber = ref(0);
 
+    const nextQuestionHandler = (): void => {
+      QuizList.push(currentQuestion.value);
+      questionNumber.value++;
+    };
+
     const currentQuestion = computed(() => {
+      console.log(QuizList);
       return fetchQuestion(questionNumber);
     });
 
-    const fetchQuestion = (questionNumber: Ref<number> = 0) => {
+    const fetchQuestion = (questionNumber: Ref<number> = 0): Question => {
       // fetch from API
       console.log(questionNumber.value);
       if (questionNumber.value === 0) {
@@ -36,7 +44,7 @@ export default {
           questionCode: { code: "prism code" }, // here something regarding highlight.js or prism.js
           questionId: 0,
           questionText: "question text",
-          selectedAnswer: null,
+          selectedAnswer: [],
           correctAnswer: 0,
           availableAnswers: ["sd", "bb"]
         };
@@ -47,7 +55,7 @@ export default {
           questionCode: { code: "prism code" }, // here something regarding highlight.js or prism.js
           questionId: 9999,
           questionText: "question text",
-          selectedAnswer: null,
+          selectedAnswer: [],
           correctAnswer: 2,
           availableAnswers: ["karamba", "alarm"]
         };
@@ -59,7 +67,8 @@ export default {
     return {
       text,
       currentQuestion,
-      questionNumber
+      questionNumber,
+      nextQuestionHandler
     };
   }
 };

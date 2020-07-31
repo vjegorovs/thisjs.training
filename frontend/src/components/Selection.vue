@@ -2,8 +2,8 @@
   <div>
     <h3>{{ headerText}}</h3>
     <ul id="questionAnswers">
-      <li v-for="answer in availableAnswers" :key="availableAnswers.indexOf(answer)">
-        <input type="checkbox" @change="upd" />
+      <li v-for="(answer, index) in availableAnswers" :key="answer">
+        <input type="checkbox" :id="index" @change="upd(index)" />
         {{ answer }}
       </li>
     </ul>
@@ -17,15 +17,19 @@ export default {
   props: { currentQuestion: Object },
   setup(props) {
     const { currentQuestion } = toRefs(props);
-    function upd(ev) {
-      console.log(ev.target.parentElement);
-      console.log("yay");
+    function upd(index) {
+      console.log(currentQuestion.value.selectedAnswer[index]);
+      currentQuestion.value.selectedAnswer[index] = !currentQuestion.value
+        .selectedAnswer[index];
+      //console.log(ev.target.parentElement.index);
+      console.log(currentQuestion.value.selectedAnswer[index]);
+      console.log(currentQuestion);
     }
     const availableAnswers = computed(
       () => currentQuestion.value.availableAnswers
     );
 
-    const selectedAnswer = computed(() => currentQuestion.value.selectedAnswer);
+    //const selectedAnswer = computed(() => currentQuestion.value.selectedAnswer);
     const headerText = computed(
       () => `Question number ${currentQuestion.value.questionId}`
     ) as ComputedRef<String>;
@@ -33,7 +37,6 @@ export default {
     return {
       headerText,
       availableAnswers,
-      selectedAnswer,
       upd
     };
   }

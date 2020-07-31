@@ -10,7 +10,7 @@ export default {
   setup(props, { emit }) {
     const { currentQuestion } = toRefs(props);
     const text: String = "Next";
-    const nextQuestion = () => {
+    const nextQuestion = (): void => {
       //here emit up the press event and switch q to next one
       emit("nextQuestion");
     };

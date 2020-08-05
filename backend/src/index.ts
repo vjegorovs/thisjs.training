@@ -1,4 +1,4 @@
-import express, { Application } from "express";
+import express from "express";
 
 import { defaultRoute } from "./routes/defaultRoute";
 
@@ -13,4 +13,6 @@ app.use((req, res, next) => {
 });
 
 app.use(defaultRoute);
-app.listen(3333);
+app.listen(3333, () => {
+  console.log("Backed initiated successfully on port 3333");
+});

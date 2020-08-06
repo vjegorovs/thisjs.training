@@ -1,6 +1,10 @@
+import dotenv from "dotenv";
 import express from "express";
-
 import { defaultRoute } from "./routes/defaultRoute";
+
+dotenv.config();
+
+const port: String | undefined = process.env.SERVER_PORT;
 
 const app: express.Application = express();
 
@@ -13,6 +17,6 @@ app.use((req, res, next) => {
 });
 
 app.use(defaultRoute);
-app.listen(3333, () => {
-  console.log("Backed initiated successfully on port 3333");
+app.listen(port, () => {
+  console.log(`Backend initiated successfully on port ${port}`);
 });

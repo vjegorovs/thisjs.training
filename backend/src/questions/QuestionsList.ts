@@ -1,6 +1,6 @@
 import Question from "./Question";
 
-export function yieldQuestion(requestId: number): Question {
+export function yieldQuestion(requestId = 0): Question {
   return QuestionsList[requestId];
 }
 

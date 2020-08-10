@@ -2,8 +2,15 @@
   <div class="parent">
     <div class="question">{{ text }}</div>
     <div class="selection-wrap">
-      <selection :current-question="currentQuestion" class="selection"></selection>
-
+      <div class="selection">
+        <h3>{{ headerText}}</h3>
+        <ul id="questionAnswers">
+          <li v-for="(answer, index) in availableAnswers" :key="answer">
+            <input type="checkbox" :id="index" @change="upd(index)" />
+            {{ answer }}
+          </li>
+        </ul>
+      </div>
       <select-button
         @nextQuestion="nextQuestionHandler"
         :current-question="currentQuestion"
@@ -24,6 +31,10 @@ export default {
   setup() {
     const QuizList: Object[] = [];
     const text: String = "now its in main view";
+    const headerText = computed(
+      () => `Question number ${currentQuestion.value.questionId}`
+    ) as ComputedRef<String>;
+
     let questionNumber = ref(0);
 
     const nextQuestionHandler = (): void => {
@@ -46,7 +57,7 @@ export default {
           questionText: "question text",
           selectedAnswer: [],
           correctAnswer: 0,
-          availableAnswers: ["sd", "bb"]
+          availableAnswers: ["sd", "bb"],
         };
         console.log(questionNumber.value);
         return reactive(result);
@@ -57,20 +68,33 @@ export default {
           questionText: "question text",
           selectedAnswer: [],
           correctAnswer: 2,
-          availableAnswers: ["karamba", "alarm"]
+          availableAnswers: ["karamba", "alarm"],
         };
         console.log(questionNumber.value);
         return reactive(result);
       }
     };
 
+    const availableAnswers = computed(
+      () => currentQuestion.value.availableAnswers
+    );
+
+    function upd(index) {
+      // toggles true/false at the selected answer index
+      currentQuestion.value.selectedAnswer[index] = !currentQuestion.value
+        .selectedAnswer[index];
+    }
+
     return {
       text,
       currentQuestion,
       questionNumber,
-      nextQuestionHandler
+      nextQuestionHandler,
+      headerText,
+      availableAnswers,
+      upd,
     };
-  }
+  },
 };
 </script>
 

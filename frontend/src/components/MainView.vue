@@ -8,7 +8,7 @@
           <h3>{{ headerText}}</h3>
           <ul id="questionAnswers">
             <li v-for="(answer, index) in availableAnswers" :key="answer">
-              <input type="checkbox" :id="index" @change="upd(index)" />
+              <input type="checkbox" :id="index" v-model="selectedAnswers[index]" />
               {{ answer }}
             </li>
           </ul>
@@ -27,9 +27,17 @@
 <script lang="ts">
 import SelectButton from "./SelectButton.vue";
 import ComponentLoading from "./ComponentLoading.vue";
-import { ref, Ref, computed, watchEffect, reactive, ComputedRef } from "vue";
+import {
+  ref,
+  Ref,
+  computed,
+  watchEffect,
+  reactive,
+  ComputedRef,
+  onBeforeMount,
+} from "vue";
 import Question from "../utils/Question";
-import { fetchHttp } from "../utils/ApiFetch";
+import { loadQuestionFromApi } from "../utils/ApiFetch";
 
 export default {
   components: { ComponentLoading, SelectButton },
@@ -40,78 +48,40 @@ export default {
       () => `Question number ${currentQuestion.value.questionId}`
     );
 
-    let questionNumber: Ref<Number> = ref(0);
+    const questionNumber = ref(0);
 
     const nextQuestionHandler = (): void => {
-      QuizList.push(currentQuestion.value);
+      QuizList.push({ ...currentQuestion.value });
+      console.log(QuizList);
       questionNumber.value++;
+      loadQuestionFromApi(currentQuestion, questionNumber);
+      //console.log(currentQuestion);
     };
 
-    async function yaba() {
-      const question = await fetchHttp<Question>().then(
-        (result) => result.question
-      );
-      console.log("yeet", question);
-      //const { question } = questionz;
+    const loaded: Ref<Boolean> = ref(false); // implement loading spinned before the first question is loading!!
 
-      return question;
-    }
-
-    const currentQuestion = computed(
-      (): Question => {
-        // let lol;
-        // setTimeout(() => {
-        //   lol = fetchQuestion(window.fetch, questionNumber);
-        // }, 5000);
-        console.log(QuizList);
-        // const questionTest: Promise<Question> = fetchHttp<Question>(
-        //   window.fetch
-        // );
-        // const { question } = bruh; // aaaaaaaaaaaaaaaa
-        // console.log(questionTest);
-        const lala = yaba();
-        return lala;
-      }
-    );
-
-    const fetchQuestion = (fetch, questionNumber: Number = 0): Question => {
-      // fetch from API
-
-      console.log(questionNumber.value);
-      if (questionNumber.value === 0) {
-        const result: Question = {
-          questionCode: { code: "prism code" }, // here something regarding highlight.js or prism.js
-          questionId: 0,
-          questionText: "question text",
-          selectedAnswer: [],
-          correctAnswer: 0,
-          availableAnswers: ["sd", "bb"],
-        };
-        console.log(questionNumber.value);
-        return reactive(result);
-      } else {
-        const result: Question = {
-          questionCode: { code: "prism code" }, // here something regarding highlight.js or prism.js
-          questionId: 9999,
-          questionText: "question text",
-          selectedAnswer: [],
-          correctAnswer: 2,
-          availableAnswers: ["karamba", "alarm"],
-        };
-        console.log(questionNumber.value);
-        return reactive(result);
-      }
-    };
+    const currentQuestion: ComputedRef<Question> = computed(() => {
+      return reactive({
+        questionCode: {},
+        questionId: 0,
+        questionText: "",
+        selectedAnswer: [],
+        correctAnswer: 0,
+        availableAnswers: [],
+      });
+    });
 
     const availableAnswers = computed(
       () => currentQuestion.value.availableAnswers
     );
 
-    function upd(index) {
-      // toggles true/false at the selected answer index
-      currentQuestion.value.selectedAnswer[index] = !currentQuestion.value
-        .selectedAnswer[index];
-    }
+    const selectedAnswers = computed(
+      () => currentQuestion.value.selectedAnswer
+    );
+
+    onBeforeMount(() => {
+      loadQuestionFromApi(currentQuestion, questionNumber);
+    });
 
     return {
       text,
@@ -120,7 +90,7 @@ export default {
       nextQuestionHandler,
       headerText,
       availableAnswers,
-      upd,
+      selectedAnswers,
     };
   },
 };

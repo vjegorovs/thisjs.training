@@ -1,5 +1,5 @@
 <template>
-  <button @click="nextQuestion(currentQuestion.questionId)">{{ text }}</button>
+  <button @click="nextQuestion()">{{ text }}</button>
 </template>
 
 <script lang="ts">
@@ -16,9 +16,9 @@ export default {
     };
     return {
       text,
-      nextQuestion
+      nextQuestion,
     };
-  }
+  },
 };
 </script>
 

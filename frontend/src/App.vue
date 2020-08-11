@@ -7,7 +7,9 @@
     <welcome-screen v-else :homeScreen="homeScreen" />
   </transition>
   <transition @enter="enter" :css="false">
-    <main-view v-if="ApplicationLoaded && mainScreen" />
+    <keep-alive>
+      <main-view v-if="ApplicationLoaded && mainScreen" />
+    </keep-alive>
   </transition>
 </template>
 
@@ -25,11 +27,11 @@ export default {
     HeaderTitle,
     ComponentLoading,
     WelcomeScreen,
-    MainView
+    MainView,
   },
   setup() {
     const firstTime = reactive({
-      firstTime: true
+      firstTime: true,
     });
 
     function toggleViewButton() {
@@ -66,7 +68,7 @@ export default {
       message,
       homeScreen,
       mainScreen,
-      viewHomeScreen
+      viewHomeScreen,
     };
   },
   methods: {
@@ -74,16 +76,16 @@ export default {
       gsap.to(el, {
         duration: 0,
         delay: 0,
-        opacity: 0
+        opacity: 0,
       });
       gsap.to(el, {
         duration: 0.7,
         delay: 0.4,
         opacity: 1,
-        onComplete: done
+        onComplete: done,
       });
-    }
-  }
+    },
+  },
 };
 </script>
 

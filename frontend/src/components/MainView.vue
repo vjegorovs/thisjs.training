@@ -1,54 +1,82 @@
 <template>
   <div class="parent">
     <div class="question">{{ text }}</div>
-    <div class="selection-wrap">
-      <div class="selection">
-        <h3>{{ headerText}}</h3>
-        <ul id="questionAnswers">
-          <li v-for="(answer, index) in availableAnswers" :key="answer">
-            <input type="checkbox" :id="index" @change="upd(index)" />
-            {{ answer }}
-          </li>
-        </ul>
+    <transition name="fade" mode="out-in">
+      <div class="selection-wrap">
+        <component-loading v-if="!currentQuestion" />
+        <div v-else class="selection">
+          <h3>{{ headerText}}</h3>
+          <ul id="questionAnswers">
+            <li v-for="(answer, index) in availableAnswers" :key="answer">
+              <input type="checkbox" :id="index" @change="upd(index)" />
+              {{ answer }}
+            </li>
+          </ul>
+        </div>
+        <select-button
+          v-if="currentQuestion"
+          @nextQuestion="nextQuestionHandler"
+          :current-question="currentQuestion"
+          class="select-button"
+        ></select-button>
       </div>
-      <select-button
-        @nextQuestion="nextQuestionHandler"
-        :current-question="currentQuestion"
-        class="select-button"
-      ></select-button>
-    </div>
+    </transition>
   </div>
 </template>
 
 <script lang="ts">
-import Selection from "./Selection.vue";
 import SelectButton from "./SelectButton.vue";
-import { ref, computed, watchEffect, reactive } from "vue";
+import ComponentLoading from "./ComponentLoading.vue";
+import { ref, Ref, computed, watchEffect, reactive, ComputedRef } from "vue";
 import Question from "../utils/Question";
+import { fetchHttp } from "../utils/ApiFetch";
 
 export default {
-  components: { Selection, SelectButton },
+  components: { ComponentLoading, SelectButton },
   setup() {
-    const QuizList: Object[] = [];
+    const QuizList: Question[] = [];
     const text: String = "now its in main view";
-    const headerText = computed(
+    const headerText: ComputedRef<String> = computed(
       () => `Question number ${currentQuestion.value.questionId}`
-    ) as ComputedRef<String>;
+    );
 
-    let questionNumber = ref(0);
+    let questionNumber: Ref<Number> = ref(0);
 
     const nextQuestionHandler = (): void => {
       QuizList.push(currentQuestion.value);
       questionNumber.value++;
     };
 
-    const currentQuestion = computed(() => {
-      console.log(QuizList);
-      return fetchQuestion(questionNumber);
-    });
+    async function yaba() {
+      const question = await fetchHttp<Question>().then(
+        (result) => result.question
+      );
+      console.log("yeet", question);
+      //const { question } = questionz;
 
-    const fetchQuestion = (questionNumber: Ref<number> = 0): Question => {
+      return question;
+    }
+
+    const currentQuestion = computed(
+      (): Question => {
+        // let lol;
+        // setTimeout(() => {
+        //   lol = fetchQuestion(window.fetch, questionNumber);
+        // }, 5000);
+        console.log(QuizList);
+        // const questionTest: Promise<Question> = fetchHttp<Question>(
+        //   window.fetch
+        // );
+        // const { question } = bruh; // aaaaaaaaaaaaaaaa
+        // console.log(questionTest);
+        const lala = yaba();
+        return lala;
+      }
+    );
+
+    const fetchQuestion = (fetch, questionNumber: Number = 0): Question => {
       // fetch from API
+
       console.log(questionNumber.value);
       if (questionNumber.value === 0) {
         const result: Question = {

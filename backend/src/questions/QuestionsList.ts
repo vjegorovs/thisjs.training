@@ -6,7 +6,23 @@ export function yieldQuestion(requestId = 0): Question {
 
 const QuestionsList: Question[] = [
   {
-    questionCode: {},
+    questionCode: `interface User {
+      name: string;
+      id: number;
+    }
+    
+    class UserAccount {
+      name: string;
+      id: number;
+    
+      constructor(name: string, id: number) {
+        this.name = name;
+        this.id = id;
+      }
+    }
+    
+    const user: User = new UserAccount("Murphy", 1);`,
+
     questionId: 0,
     questionText: "The text for question number 0",
     selectedAnswer: [],
@@ -14,7 +30,22 @@ const QuestionsList: Question[] = [
     availableAnswers: ["first Answer", "second answer", "ThIrD AnSwEr"],
   },
   {
-    questionCode: {},
+    questionCode: `interface User {
+      name: string;
+      id: number;
+    }
+    
+    class UserAccount {
+      name: string;
+      id: number;
+    
+      constructor(name: string, id: number) {
+        this.name = name;
+        this.id = id;
+      }
+    }
+    
+    const user: User = new UserAccount("Murphy", 2);`,
     questionId: 1,
     questionText: "The text for question number 1",
     selectedAnswer: [],
@@ -27,7 +58,22 @@ const QuestionsList: Question[] = [
     ],
   },
   {
-    questionCode: {},
+    questionCode: `interface User {
+      name: string;
+      id: number;
+    }
+    
+    class UserAccount {
+      name: string;
+      id: number;
+    
+      constructor(name: string, id: number) {
+        this.name = name;
+        this.id = id;
+      }
+    }
+    
+    const user: User = new UserAccount("Murphy", 3);`,
     questionId: 2,
     questionText: "The text for question number 2",
     selectedAnswer: [],
@@ -40,7 +86,22 @@ const QuestionsList: Question[] = [
     ],
   },
   {
-    questionCode: {},
+    questionCode: `interface User {
+      name: string;
+      id: number;
+    }
+    
+    class UserAccount {
+      name: string;
+      id: number;
+    
+      constructor(name: string, id: number) {
+        this.name = name;
+        this.id = id;
+      }
+    }
+    
+    const user: User = new UserAccount("Murphy", 4);`,
     questionId: 3,
     questionText: "The text for question number 3",
     selectedAnswer: [],
@@ -53,7 +114,22 @@ const QuestionsList: Question[] = [
     ],
   },
   {
-    questionCode: {},
+    questionCode: `interface User {
+      name: string;
+      id: number;
+    }
+    
+    class UserAccount {
+      name: string;
+      id: number;
+    
+      constructor(name: string, id: number) {
+        this.name = name;
+        this.id = id;
+      }
+    }
+    
+    const user: User = new UserAccount("Murphy", 1);`,
     questionId: 4,
     questionText: "The text for question number 4",
     selectedAnswer: [],

@@ -1,8 +1,10 @@
 <template>
   <div class="parent">
-    <div class="question">
+    <div class="question" :class="[inset]">
       <category-select v-if="!categorySelected" @loadCategory="loadCategory" />
-      <div v-else>{{ text }}</div>
+      <div class="code" v-else>
+        <code-format :current-question="codeText" :key="codeText"></code-format>
+      </div>
     </div>
     <div class="selection-wrap" v-if="categorySelected">
       <transition name="fade" mode="out-in">
@@ -11,7 +13,11 @@
           <h3>Question number: {{ currentQuestion.questionId }}</h3>
           <ul id="questionAnswers">
             <li v-for="(answer, index) in availableAnswers" :key="answer">
-              <input type="checkbox" :id="index" v-model="selectedAnswers[index]" />
+              <input
+                type="checkbox"
+                :id="index"
+                v-model="selectedAnswers[index]"
+              />
               {{ answer }}
             </li>
           </ul>
@@ -31,6 +37,7 @@
 import SelectButton from "./SelectButton.vue";
 import ComponentLoading from "./ComponentLoading.vue";
 import CategorySelect from "./CategorySelect.vue";
+import CodeFormat from "./CodeFormat.vue";
 import { CategoryList } from "../enums/Categories";
 import {
   ref,
@@ -40,36 +47,47 @@ import {
   reactive,
   ComputedRef,
   onBeforeMount,
+  onBeforeUpdate,
+  watch,
+  h,
 } from "vue";
 import Question from "../utils/Question";
 import { loadQuestionFromApi } from "../utils/ApiFetch";
 
 export default {
-  components: { ComponentLoading, SelectButton, CategorySelect },
+  components: { ComponentLoading, SelectButton, CategorySelect, CodeFormat },
   setup() {
     const QuizList: Question[] = [];
-    const text: String = "now its in main view";
     const categorySelected: Ref<Boolean> = ref(false);
+    const inset: Ref<string> = ref("");
 
     const loadCategory = (category: number): void => {
       categorySelected.value = !categorySelected.value;
+      inset.value = "inset";
+      // later on provide the category into the loadquestionfromapi menthod as route param
     };
 
     const questionNumber = ref(0);
 
     const nextQuestionHandler = (): void => {
       // add check if not selected any answers -> button angry animation and return
+      if (
+        currentQuestion.selectedAnswer.filter((selected) => selected === true)
+          .length === 0
+      )
+        return;
       QuizList.push({ ...currentQuestion });
       console.log(QuizList);
       questionNumber.value++;
       loadQuestionFromApi(currentQuestion, questionNumber);
+
       //console.log(currentQuestion);
     };
 
     const loaded: Ref<Boolean> = ref(false); // implement loading spinner before the first question is loading!!
 
     const currentQuestion: Question = reactive({
-      questionCode: {},
+      questionCode: "",
       questionId: 0,
       questionText: "",
       selectedAnswer: [],
@@ -78,10 +96,19 @@ export default {
     });
 
     const availableAnswers = computed(() => currentQuestion.availableAnswers);
+    const codeText = computed(() => {
+      console.log("changed codse!");
+      return currentQuestion.questionCode;
+    });
     const selectedAnswers = computed(() => currentQuestion.selectedAnswer);
 
+    // watch(codeText, () => {
+    //   console.log("codetext changed");
+    //   console.log(currentQuestion.questionCode);
+    // });
     onBeforeMount(() => {
       //settimeout to mock bad loading here
+
       setTimeout(() => {
         loadQuestionFromApi(currentQuestion, questionNumber);
         loaded.value = !loaded.value;
@@ -89,7 +116,7 @@ export default {
     });
 
     return {
-      text,
+      codeText,
       currentQuestion,
       questionNumber,
       nextQuestionHandler,
@@ -98,6 +125,7 @@ export default {
       loaded,
       categorySelected,
       loadCategory,
+      inset,
     };
   },
 };
@@ -117,9 +145,21 @@ export default {
   margin-top: 20px;
 }
 
+.inset {
+  box-shadow: inset 4px 4px 17px -6px rgba(0, 0, 0, 0.18);
+}
+
+.code {
+  width: 75%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+}
+
 .question {
   grid-area: 2 / 2 / 5 / 5;
-  box-shadow: inset 4px 4px 17px -6px rgba(0, 0, 0, 0.18);
+
   border-radius: 10px;
   padding: 3px 3px 3px 3px;
 }

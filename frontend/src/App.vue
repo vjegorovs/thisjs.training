@@ -38,8 +38,6 @@ export default {
       firstTime.firstTime = false;
       mainScreen.value = true;
       homeScreen.value = false;
-      console.log("yeet");
-      console.log(firstTime);
     }
 
     function viewHomeScreen() {

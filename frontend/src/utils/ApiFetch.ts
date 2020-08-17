@@ -19,18 +19,18 @@ const fetchHttp = async <T>(
 };
 
 export const loadQuestionFromApi = async (
-  currentQuestion: ComputedRef<Question>,
+  currentQuestion: Question,
   questionNumber: Ref<number>
 ): Promise<void> => {
   const question = await fetchHttp<{ message: string; question: Question }>(
     window.fetch,
     `http://localhost:3333/${questionNumber.value}`
   ).then((data) => {
-    currentQuestion.value.questionCode = data.question.questionCode;
-    currentQuestion.value.questionId = data.question.questionId;
-    currentQuestion.value.questionText = data.question.questionText;
-    currentQuestion.value.selectedAnswer = data.question.selectedAnswer;
-    currentQuestion.value.correctAnswer = data.question.correctAnswer;
-    currentQuestion.value.availableAnswers = data.question.availableAnswers;
+    currentQuestion.questionCode = data.question.questionCode;
+    currentQuestion.questionId = data.question.questionId;
+    currentQuestion.questionText = data.question.questionText;
+    currentQuestion.selectedAnswer = data.question.selectedAnswer;
+    currentQuestion.correctAnswer = data.question.correctAnswer;
+    currentQuestion.availableAnswers = data.question.availableAnswers;
   });
 };

@@ -1,32 +1,37 @@
 <template>
   <div class="parent">
-    <div class="question">{{ text }}</div>
-    <transition name="fade" mode="out-in">
-      <div class="selection-wrap">
-        <component-loading v-if="!currentQuestion" />
+    <div class="question">
+      <category-select v-if="!categorySelected" @loadCategory="loadCategory" />
+      <div v-else>{{ text }}</div>
+    </div>
+    <div class="selection-wrap" v-if="categorySelected">
+      <transition name="fade" mode="out-in">
+        <component-loading v-if="!loaded" />
         <div v-else class="selection">
-          <h3>{{ headerText}}</h3>
+          <h3>Question number: {{ currentQuestion.questionId }}</h3>
           <ul id="questionAnswers">
             <li v-for="(answer, index) in availableAnswers" :key="answer">
               <input type="checkbox" :id="index" v-model="selectedAnswers[index]" />
               {{ answer }}
             </li>
           </ul>
+          <select-button
+            v-if="currentQuestion"
+            @nextQuestion="nextQuestionHandler"
+            :current-question="currentQuestion"
+            class="select-button"
+          ></select-button>
         </div>
-        <select-button
-          v-if="currentQuestion"
-          @nextQuestion="nextQuestionHandler"
-          :current-question="currentQuestion"
-          class="select-button"
-        ></select-button>
-      </div>
-    </transition>
+      </transition>
+    </div>
   </div>
 </template>
 
 <script lang="ts">
 import SelectButton from "./SelectButton.vue";
 import ComponentLoading from "./ComponentLoading.vue";
+import CategorySelect from "./CategorySelect.vue";
+import { CategoryList } from "../enums/Categories";
 import {
   ref,
   Ref,
@@ -40,47 +45,47 @@ import Question from "../utils/Question";
 import { loadQuestionFromApi } from "../utils/ApiFetch";
 
 export default {
-  components: { ComponentLoading, SelectButton },
+  components: { ComponentLoading, SelectButton, CategorySelect },
   setup() {
     const QuizList: Question[] = [];
     const text: String = "now its in main view";
-    const headerText: ComputedRef<String> = computed(
-      () => `Question number ${currentQuestion.value.questionId}`
-    );
+    const categorySelected: Ref<Boolean> = ref(false);
+
+    const loadCategory = (category: number): void => {
+      categorySelected.value = !categorySelected.value;
+    };
 
     const questionNumber = ref(0);
 
     const nextQuestionHandler = (): void => {
-      QuizList.push({ ...currentQuestion.value });
+      // add check if not selected any answers -> button angry animation and return
+      QuizList.push({ ...currentQuestion });
       console.log(QuizList);
       questionNumber.value++;
       loadQuestionFromApi(currentQuestion, questionNumber);
       //console.log(currentQuestion);
     };
 
-    const loaded: Ref<Boolean> = ref(false); // implement loading spinned before the first question is loading!!
+    const loaded: Ref<Boolean> = ref(false); // implement loading spinner before the first question is loading!!
 
-    const currentQuestion: ComputedRef<Question> = computed(() => {
-      return reactive({
-        questionCode: {},
-        questionId: 0,
-        questionText: "",
-        selectedAnswer: [],
-        correctAnswer: 0,
-        availableAnswers: [],
-      });
+    const currentQuestion: Question = reactive({
+      questionCode: {},
+      questionId: 0,
+      questionText: "",
+      selectedAnswer: [],
+      correctAnswer: 0,
+      availableAnswers: [],
     });
 
-    const availableAnswers = computed(
-      () => currentQuestion.value.availableAnswers
-    );
-
-    const selectedAnswers = computed(
-      () => currentQuestion.value.selectedAnswer
-    );
+    const availableAnswers = computed(() => currentQuestion.availableAnswers);
+    const selectedAnswers = computed(() => currentQuestion.selectedAnswer);
 
     onBeforeMount(() => {
-      loadQuestionFromApi(currentQuestion, questionNumber);
+      //settimeout to mock bad loading here
+      setTimeout(() => {
+        loadQuestionFromApi(currentQuestion, questionNumber);
+        loaded.value = !loaded.value;
+      }, 1000);
     });
 
     return {
@@ -88,9 +93,11 @@ export default {
       currentQuestion,
       questionNumber,
       nextQuestionHandler,
-      headerText,
       availableAnswers,
       selectedAnswers,
+      loaded,
+      categorySelected,
+      loadCategory,
     };
   },
 };
@@ -131,8 +138,11 @@ export default {
 .selection {
   height: 60%;
   width: 100%;
+  > ul {
+    height: 20%;
+  }
 }
 .select-button {
-  margin-top: 30px;
+  margin-top: 70px;
 }
 </style>

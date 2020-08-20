@@ -3,17 +3,23 @@
   "version": "0.0.0",
   "scripts": {
     "dev": "vite",
-    "build": "vite build"
+    "build": "vite build",
+    "test": "jest"
   },
   "dependencies": {
     "gsap": "^3.5.0",
     "highlight.js": "^10.1.2",
-    "vue": "^3.0.0-rc.5",
-    "vue-highlight-component": "^1.0.0"
+    "vue": "^3.0.0-rc.5"
   },
   "devDependencies": {
+    "@types/jest": "^26.0.10",
     "@vue/compiler-sfc": "^3.0.0-rc.5",
+    "@vue/test-utils": "^2.0.0-beta.2",
+    "jest": "^26.4.0",
     "sass": "^1.26.10",
-    "vite": "^1.0.0-rc.4"
+    "ts-jest": "^26.2.0",
+    "typescript": "^3.9.7",
+    "vite": "^1.0.0-rc.4",
+    "vue-jest": "^5.0.0-alpha.3"
   }
 }

@@ -146,20 +146,22 @@ export default {
 }
 
 .inset {
+  background-color: #fafafa;
   box-shadow: inset 4px 4px 17px -6px rgba(0, 0, 0, 0.18);
 }
 
 .code {
-  width: 75%;
+  margin-left: 2%;
   height: 100%;
+  width: 70%;
   display: flex;
   justify-content: center;
+  align-items: center;
   flex-direction: column;
 }
 
 .question {
   grid-area: 2 / 2 / 5 / 5;
-
   border-radius: 10px;
   padding: 3px 3px 3px 3px;
 }
@@ -172,17 +174,17 @@ export default {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-end;
 }
 
 .selection {
-  height: 60%;
+  height: 80%;
   width: 100%;
   > ul {
-    height: 20%;
+    height: 40%;
   }
 }
 .select-button {
-  margin-top: 70px;
+  height: 3rem;
 }
 </style>

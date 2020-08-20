@@ -3,9 +3,9 @@
 </template>
 
 <script lang="ts">
-import { toRefs } from "vue";
+import { toRefs, defineComponent } from "vue";
 
-export default {
+export default defineComponent({
   props: { currentQuestion: Object },
   setup(props, { emit }) {
     const { currentQuestion } = toRefs(props);
@@ -19,7 +19,7 @@ export default {
       nextQuestion,
     };
   },
-};
+});
 </script>
 
 <style lang="scss" scoped>

@@ -142,7 +142,6 @@ export default {
   grid-column-gap: 0px;
   grid-row-gap: 0px;
   height: 70vh;
-  margin-top: 20px;
 }
 
 .inset {
@@ -183,8 +182,5 @@ export default {
   > ul {
     height: 40%;
   }
-}
-.select-button {
-  height: 3rem;
 }
 </style>

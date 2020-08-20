@@ -27,11 +27,11 @@ button {
   cursor: pointer;
   border: 1px solid #e7e8ec;
   border-radius: 10px;
-  width: 50%;
-  height: 10%;
-  background: #f1f2f7;
-  color: #2f3144;
-  font-size: 25px;
+  width: 80%;
+  height: 2em;
+  background: #ffbc00;
+  color: #ffffff;
+  font-size: 2em;
   &:active {
     border: 0;
     outline: none;

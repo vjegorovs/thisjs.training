@@ -5,6 +5,10 @@
   text-align: center;
 }
 
+body {
+  margin: 0;
+}
+
 @font-face {
   font-family: "Muli-Regular";
   src: url(./assets/fonts/Muli-Regular.ttf) format("truetype");

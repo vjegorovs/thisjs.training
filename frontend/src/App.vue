@@ -1,16 +1,18 @@
 <template>
-  <HeaderTitle @click="viewHomeScreen" />
+  <div @mousemove="mouse">
+    <HeaderTitle @click="viewHomeScreen" />
 
-  <transition name="fade" mode="out-in">
-    <component-loading v-if="!ApplicationLoaded" />
+    <transition name="fade" mode="out-in">
+      <component-loading v-if="!ApplicationLoaded" />
 
-    <welcome-screen v-else :homeScreen="homeScreen" />
-  </transition>
-  <transition @enter="enter" :css="false">
-    <keep-alive>
-      <main-view v-if="ApplicationLoaded && mainScreen" />
-    </keep-alive>
-  </transition>
+      <welcome-screen v-else :homeScreen="homeScreen" />
+    </transition>
+    <transition @enter="enter" :css="false">
+      <keep-alive>
+        <main-view v-if="ApplicationLoaded && mainScreen" />
+      </keep-alive>
+    </transition>
+  </div>
 </template>
 
 <script lang="ts">
@@ -61,12 +63,22 @@ export default {
     setTimeout(() => {
       removeLoader();
     }, 1300);
+
+    const mouse = (e) => {
+      coordinates.x = e.clientX;
+      coordinates.y = e.clientY;
+    };
+    const coordinates = reactive({ x: 0, y: 0 });
+
+    provide("mouseCoordinates", coordinates);
+
     return {
       ApplicationLoaded,
       message,
       homeScreen,
       mainScreen,
       viewHomeScreen,
+      mouse,
     };
   },
   methods: {

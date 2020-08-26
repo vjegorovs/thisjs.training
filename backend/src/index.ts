@@ -4,7 +4,7 @@ import { defaultRoute } from "./routes/defaultRoute";
 
 dotenv.config();
 
-const port: String | undefined = process.env.SERVER_PORT;
+const port: String | undefined = process.env.SERVER_PORT || "3333";
 
 const app: express.Application = express();
 

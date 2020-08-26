@@ -5,9 +5,10 @@
 </template>
 
 <script lang="ts">
-import { computed, inject, toRefs, ref } from "vue";
+import { computed, inject } from "vue";
 
 export default {
+  //change to setup
   data() {
     const coordinates = inject("mouseCoordinates", { x: 1, y: 1 });
 

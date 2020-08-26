@@ -62,7 +62,7 @@ export default {
     let message = "this is a test 2";
     setTimeout(() => {
       removeLoader();
-    }, 1300);
+    }, 600);
 
     const mouse = (e) => {
       coordinates.x = e.clientX;

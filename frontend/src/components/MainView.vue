@@ -13,11 +13,7 @@
           <h3>Question number: {{ currentQuestion.questionId }}</h3>
           <ul id="questionAnswers">
             <li v-for="(answer, index) in availableAnswers" :key="answer">
-              <input
-                type="checkbox"
-                :id="index"
-                v-model="selectedAnswers[index]"
-              />
+              <input type="checkbox" :id="index" v-model="selectedAnswers[index]" />
               {{ answer }}
             </li>
           </ul>
@@ -181,6 +177,17 @@ export default {
   width: 100%;
   > ul {
     height: 40%;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: baseline;
+    > li {
+      margin-top: 0.5em;
+      padding: 0 25% 0 25%;
+      list-style: none;
+      text-align: left;
+    }
   }
 }
 </style>

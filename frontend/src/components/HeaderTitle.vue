@@ -1,6 +1,9 @@
 <template>
   <div class="center">
-    <h1>This<span :style="style">JS</span>.training</h1>
+    <h1>
+      This
+      <span :style="style">JS</span>.training
+    </h1>
   </div>
 </template>
 
@@ -8,12 +11,14 @@
 import { computed, inject } from "vue";
 
 export default {
-  //change to setup
-  data() {
-    const coordinates = inject("mouseCoordinates", { x: 1, y: 1 });
-
+  setup() {
+    // Receives coordinates from mouse input from app.vue and adjust styles on the "JS" span in the header
+    const coordinates = inject("mouseCoordinates", { x: 1, y: 1 }) as {
+      x: number;
+      y: number;
+    };
     const style = computed(
-      () =>
+      (): string =>
         `background: -webkit-linear-gradient(${
           coordinates.x - coordinates.y
         }deg, rgba(255,188,0,1), rgba(240,132,0,1) 79.71%);
@@ -21,6 +26,7 @@ export default {
        -webkit-text-fill-color: transparent;
        `
     );
+
     return {
       style,
     };

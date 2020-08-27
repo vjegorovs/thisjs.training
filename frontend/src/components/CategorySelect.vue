@@ -3,9 +3,7 @@
     <button v-for="(category, index) in categories" :key="category" @click="selectCategory(index)">
       <div
         class="background-image"
-        :style="
-    [{ backgroundImage: 'url(../assets/vue.png)' 
-   }]"
+        :style="{backgroundImage: `url(../src/assets/${category.img})`}"
       ></div>
       <span class="title">{{ category.name }}</span>
       <span class="text">{{ category.flavorText }}</span>
@@ -20,6 +18,8 @@ import Category from "../utils/Category";
 
 export default {
   setup(props, { emit }) {
+    // To progress further, settled on static category list
+    // #TODO-3: implement /category/ & /categories/ routes in backend
     const categories: Category[] = [
       {
         name: "Vanilla JS",
@@ -32,20 +32,15 @@ export default {
         flavorText: CategoryList.Placeholder_JS,
         img: "js.png",
       },
-    ]; // should be fetched later on
+    ];
 
     const selectCategory = (categoryNumber: number): void => {
       emit("loadCategory", categoryNumber);
     };
 
-    const backGroundImage = computed(() => {
-      return `url(${import("../assets/js.png")})`;
-    });
-
     return {
       selectCategory,
       categories,
-      backGroundImage,
     };
   },
 };

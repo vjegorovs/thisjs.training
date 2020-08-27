@@ -4,14 +4,18 @@
 
 <script lang="ts">
 import { toRefs, defineComponent } from "vue";
+import {} from "../utils/Question";
+import Question from "../../../backend/src/questions/Question";
 
 export default defineComponent({
   props: { currentQuestion: Object },
   setup(props, { emit }) {
-    const { currentQuestion } = toRefs(props);
+    // ---
+    // For potential future functionality implementation
+    const { currentQuestion } = toRefs(props) as { currentQuestion: Object };
     const text: String = "Next";
+    // ---
     const nextQuestion = (): void => {
-      //here emit up the press event and switch q to next one
       emit("nextQuestion");
     };
     return {

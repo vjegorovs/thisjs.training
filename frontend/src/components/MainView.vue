@@ -8,8 +8,7 @@
     </div>
     <div class="selection-wrap" v-if="categorySelected">
       <transition name="fade" mode="out-in">
-        <component-loading v-if="!loaded" />
-        <div v-else class="selection">
+        <div class="selection">
           <h3>Question number: {{ currentQuestion.questionId }}</h3>
           <ul id="questionAnswers">
             <li v-for="(answer, index) in availableAnswers" :key="answer">
@@ -34,7 +33,6 @@ import SelectButton from "./SelectButton.vue";
 import ComponentLoading from "./ComponentLoading.vue";
 import CategorySelect from "./CategorySelect.vue";
 import CodeFormat from "./CodeFormat.vue";
-import { CategoryList } from "../enums/Categories";
 import {
   ref,
   Ref,
@@ -47,41 +45,27 @@ import {
   watch,
   h,
 } from "vue";
+import { CategoryList } from "../enums/Categories";
 import Question from "../utils/Question";
 import { loadQuestionFromApi } from "../utils/ApiFetch";
+import { deepSpread } from "../utils/deepSpread";
 
 export default {
   components: { ComponentLoading, SelectButton, CategorySelect, CodeFormat },
   setup() {
-    const QuizList: Question[] = [];
-    const categorySelected: Ref<Boolean> = ref(false);
-    const inset: Ref<string> = ref("");
-
+    // catches the CategorySelect components emit re: selected category
     const loadCategory = (category: number): void => {
       categorySelected.value = !categorySelected.value;
+
+      // figure out a better solution for the css property triggering
       inset.value = "inset";
       // later on provide the category into the loadquestionfromapi menthod as route param
     };
 
-    const questionNumber = ref(0);
-
-    const nextQuestionHandler = (): void => {
-      // add check if not selected any answers -> button angry animation and return
-      if (
-        currentQuestion.selectedAnswer.filter((selected) => selected === true)
-          .length === 0
-      )
-        return;
-      QuizList.push({ ...currentQuestion });
-      console.log(QuizList);
-      questionNumber.value++;
-      loadQuestionFromApi(currentQuestion, questionNumber);
-
-      //console.log(currentQuestion);
-    };
-
-    const loaded: Ref<Boolean> = ref(false); // implement loading spinner before the first question is loading!!
-
+    const QuizList: Question[] = [];
+    const categorySelected: Ref<boolean> = ref(false);
+    const questionNumber: Ref<number> = ref(0);
+    const inset: Ref<string> = ref("");
     const currentQuestion: Question = reactive({
       questionCode: "",
       questionId: 0,
@@ -91,24 +75,36 @@ export default {
       availableAnswers: [],
     });
 
-    const availableAnswers = computed(() => currentQuestion.availableAnswers);
-    const codeText = computed(() => {
-      console.log("changed codse!");
+    const availableAnswers = computed(
+      (): string[] => currentQuestion.availableAnswers
+    );
+    const codeText = computed((): string => {
       return currentQuestion.questionCode;
     });
-    const selectedAnswers = computed(() => currentQuestion.selectedAnswer);
+    const selectedAnswers = computed(
+      (): boolean[] => currentQuestion.selectedAnswer
+    );
 
-    // watch(codeText, () => {
-    //   console.log("codetext changed");
-    //   console.log(currentQuestion.questionCode);
-    // });
+    const nextQuestionHandler = (): void => {
+      //#TODO-5: add angry button animation  with gsap when returning below
+      if (
+        currentQuestion.selectedAnswer.filter((selected) => selected === true)
+          .length === 0
+      ) {
+        return;
+      }
+      // Questions are added to a local array to account for a scenario where the user
+      // would want to go back a question
+      // #TODO-6: implement back button + functionality
+      QuizList.push(deepSpread(currentQuestion));
+
+      questionNumber.value++;
+      loadQuestionFromApi(currentQuestion, questionNumber);
+    };
+
+    // Preloading the first question
     onBeforeMount(() => {
-      //settimeout to mock bad loading here
-
-      setTimeout(() => {
-        loadQuestionFromApi(currentQuestion, questionNumber);
-        loaded.value = !loaded.value;
-      }, 1000);
+      loadQuestionFromApi(currentQuestion, questionNumber);
     });
 
     return {
@@ -118,7 +114,6 @@ export default {
       nextQuestionHandler,
       availableAnswers,
       selectedAnswers,
-      loaded,
       categorySelected,
       loadCategory,
       inset,

@@ -3,15 +3,15 @@
 </template>
 
 <script lang="ts">
-import { computed, ref, inject, toRefs } from "vue";
+import { computed, ref, inject, toRefs, ComputedRef } from "vue";
 
 export default {
   setup(props, { emit }) {
-    let buttonmsg = computed(() =>
+    let buttonmsg: ComputedRef<string> = computed((): string =>
       inject("firstTime", true).firstTime === true ? "Begin" : "Resume"
     );
-    const changeToMainView = inject("toggleView");
-    const begin = () => {
+    const changeToMainView = inject("toggleView") as () => void;
+    const begin = (): void => {
       emit("buttonPress");
       // figure out a way to have an alternative animation for "resume" mode since its too much to see it everytime
 

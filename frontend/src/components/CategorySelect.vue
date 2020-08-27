@@ -69,7 +69,7 @@ button {
   text-decoration: none;
   background: white;
   height: 40%;
-  width: 17em;
+  width: max(25%, 17em);
   margin-top: 20px;
   background: #ffffff;
 
@@ -78,15 +78,19 @@ button {
   border-radius: 4px;
   color: black;
   font-family: sans-serif;
-  font-size: 1rem;
+
   cursor: pointer;
   text-align: center;
   .title {
     margin: 10px 0 10px 0;
     height: 30%;
+    font-size: 1.5em;
+    font-weight: 600;
+    text-decoration-line: underline;
   }
   .text {
     vertical-align: text-bottom;
+    font-size: 1.2em;
   }
   + button {
     margin-left: 20px;

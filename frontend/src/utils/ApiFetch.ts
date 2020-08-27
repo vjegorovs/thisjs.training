@@ -1,4 +1,4 @@
-import { Ref, ComputedRef } from "vue";
+import { Ref } from "vue";
 import Question from "./Question";
 
 const fetchHttp = async <T>(
@@ -9,8 +9,8 @@ const fetchHttp = async <T>(
       "Content-Type": "application/json",
     },
     method: "GET",
-  },
-  ...params
+  }
+  //...params
 ): Promise<T> => {
   const response = await fetchMethod(url, headers);
   const body: Promise<T> = await response.json();

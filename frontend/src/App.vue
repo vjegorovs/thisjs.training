@@ -21,7 +21,7 @@ import HeaderTitle from "./components/HeaderTitle.vue";
 import WelcomeScreen from "./components/WelcomeScreen.vue";
 import MainView from "./components/MainView.vue";
 import { gsap } from "gsap";
-import { computed, ref, reactive, provide } from "vue";
+import { computed, ref, reactive, provide, Ref, ComputedRef } from "vue";
 
 export default {
   name: "App",
@@ -32,57 +32,61 @@ export default {
     MainView,
   },
   setup() {
-    const firstTime = reactive({
+    // Lots of booleans for conditional rendering / vue-switching
+    //#TODO-1: transition into vue-router
+    const firstTime: { firstTime: boolean } = reactive({
       firstTime: true,
     });
 
-    function toggleViewButton() {
+    function toggleViewButton(): void {
       firstTime.firstTime = false;
       mainScreen.value = true;
       homeScreen.value = false;
     }
 
-    function viewHomeScreen() {
+    function viewHomeScreen(): void {
       mainScreen.value = false;
       homeScreen.value = true;
     }
+
+    // This here dependency injection into the Welcomebutton.vue component is
+    // responsible for the button text and view switching after the button press
     provide("firstTime", firstTime);
     provide("toggleView", toggleViewButton);
 
-    const homeScreen = ref(false);
-    const mainScreen = ref(false);
-    const loaded = ref(false); // placeholder
-    let ApplicationLoaded = computed(() => {
+    const homeScreen: Ref<boolean> = ref(false);
+    const mainScreen: Ref<boolean> = ref(false);
+    const loaded: Ref<boolean> = ref(false);
+    // ----
+
+    // This here simulates bad loading scenario and renders loader component
+    // #TODO-2: as vue-router is implemented, wrap the whole router in a single
+    // transition element and get rid of below section
+    let ApplicationLoaded: ComputedRef<boolean> = computed((): boolean => {
       return loaded.value ? true : false;
     });
-    const removeLoader = () => {
+    const removeLoader = (): void => {
       loaded.value = !loaded.value;
       homeScreen.value = !homeScreen.value;
     };
-    let message = "this is a test 2";
-    setTimeout(() => {
+
+    setTimeout((): void => {
       removeLoader();
     }, 600);
+    // ----
 
-    const mouse = (e) => {
+    // Tracking mouse coordinates for header "JS" color effect
+    const coordinates: { x: number; y: number } = reactive({ x: 0, y: 0 });
+
+    const mouse = (e): void => {
       coordinates.x = e.clientX;
       coordinates.y = e.clientY;
     };
-    const coordinates = reactive({ x: 0, y: 0 });
 
     provide("mouseCoordinates", coordinates);
+    // ----
 
-    return {
-      ApplicationLoaded,
-      message,
-      homeScreen,
-      mainScreen,
-      viewHomeScreen,
-      mouse,
-    };
-  },
-  methods: {
-    enter(el, done) {
+    const enter = (el: HTMLElement, done: () => void): void => {
       gsap.to(el, {
         duration: 0,
         delay: 0,
@@ -94,7 +98,15 @@ export default {
         opacity: 1,
         onComplete: done,
       });
-    },
+    };
+    return {
+      ApplicationLoaded,
+      homeScreen,
+      mainScreen,
+      viewHomeScreen,
+      mouse,
+      enter,
+    };
   },
 };
 </script>

@@ -41,14 +41,14 @@ npm install
 npm run dev
 ```
 
-- **Result**: Backend API available at `localhost:3333` and FrontEnd is on `localhost:3000`
+- **Result**: Backend API available at `localhost:3333` and Frontend is on `localhost:3000`
   TODO: npm-run-all from root to shorten just to two commands
 
 ## Design decisions
 
-#### Why not just have questions on the fronend?
+#### Why not just have questions on the frontend?
 
-- I've wanted to work a bit with Backend tech, even the most basic one. Idea was that the full question list is not available as a whole on the frontend. Additionally to practise async request.
+- I've wanted to work a bit with backend tech, even the most basic one. Idea was that the full question list is not available as a whole on the frontend. Additionally to practise async requests.
 
 #### Why Composition API?
 
